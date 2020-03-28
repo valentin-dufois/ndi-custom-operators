@@ -103,9 +103,8 @@ NDIOut::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* re
 	const OP_DATInput * metadataDAT = inputs->getParDAT("Metadatadat");
 	if(metadataDAT) {
 		_feedMetadata.p_data = const_cast<char*>(metadataDAT->getCell(0, 0));
+		NDIlib_send_add_connection_metadata(_feed, &_feedMetadata);
 	}
-
-	NDIlib_send_add_connection_metadata(_feed, &_feedMetadata);
 }
 
 bool
@@ -162,6 +161,7 @@ NDIOut::execute(TOP_OutputFormatSpecs* output,
 		}
 
 		memcpy_fast(output->cpuPixelData[0], inputPtr, inputTOP->width * inputTOP->height * 4);
+
 		output->newCPUPixelDataLocation = 0;
 
 		if(!_feed) // No feed, no frame
@@ -172,9 +172,13 @@ NDIOut::execute(TOP_OutputFormatSpecs* output,
 		_videoFrame.yres = inputTOP->height;
 		_videoFrame.frame_rate_N = _params.fps;
 		_videoFrame.line_stride_in_bytes = inputTOP->width * 4;
-		_videoFrame.p_data = (uint8_t *)output->cpuPixelData[0];
+		_videoFrame.p_data = (uint8_t*)output->cpuPixelData[0];
 
+#ifdef _WIN32
+		NDIlib_send_send_video_v2(_feed, &_videoFrame);
+#else
 		NDIlib_send_send_video_async_v2(_feed, &_videoFrame);
+#endif
 	}
 
 }

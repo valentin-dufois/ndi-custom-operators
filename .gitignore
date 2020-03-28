@@ -1,0 +1,18 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Backup
+/Debug
+/Release/NDIInTOP/NDIInTOP.tlog
+/Release/NDIOutTOP.tlog
+*.obj
+/Release/NDIOutTOP
+/Release/NDIInTOP
+/Release/NDIOutTOP.pdb
+/Release/NDIOutTOP.ipdb
+/Release/NDIOutTOP.iobj
+/Release/NDIInTOP.pdb
+/Release/NDIInTOP.ipdb
+/Release/NDIInTOP.iobj

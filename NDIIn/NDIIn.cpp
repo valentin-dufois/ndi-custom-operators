@@ -40,7 +40,7 @@ NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* res
 {
 	ginfo->cookEveryFrame = true;
 	ginfo->memPixelType = OP_CPUMemPixelType::BGRA8Fixed;
-	ginfo->clearBuffers = false;
+	ginfo->clearBuffers = true;
 
 	// get parameters
 	_params.active = inputs->getParInt("Active");
@@ -102,7 +102,6 @@ NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* res
 	if(sourceNamePar != _params.sourceName && _receiver != nullptr) {
 		// Requested source has changed, close current connection
 		NDIlib_recv_destroy(_receiver);
-		_receiver = nullptr;
 	}
 
 	_params.sourceName = sourceNamePar;
@@ -164,6 +163,9 @@ NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* res
 	do {
 		frameType = NDIlib_recv_capture_v2(_receiver, &_videoFrame, nullptr, nullptr, 10);
 	} while(frameType != NDIlib_frame_type_none && frameType != NDIlib_frame_type_video);
+
+
+	ginfo->clearBuffers = false;
 }
 
 bool
@@ -174,7 +176,7 @@ NDIIn::getOutputFormat(TOP_OutputFormat* format, const OP_Inputs* inputs, void* 
 	// If we did that, we'd want to return true to tell the TOP to use the settings we've
 	// specified.
 	// In this example we'll return false and use the TOP's settings
-	if(_isErrored || _receiver == nullptr) {
+	if(_isErrored || _receiver == nullptr || !_params.active) {
 		return false;
 	}
 
@@ -199,8 +201,14 @@ NDIIn::execute(TOP_OutputFormatSpecs* output,
 						TOP_Context *context,
 						void* reserved1)
 {
+	output->newCPUPixelDataLocation = 0;
+
 	// Can we receive ?
-	if(_isErrored || _receiver == nullptr || _videoFrame.p_data == nullptr) {
+	if(_isErrored || _receiver == nullptr || !_params.active) {
+		return;
+	}
+
+	if (_videoFrame.p_data == nullptr) {
 		output->newCPUPixelDataLocation = -1;
 		return;
 	}
@@ -210,7 +218,6 @@ NDIIn::execute(TOP_OutputFormatSpecs* output,
 	if(_videoFrame.xres != output->width || _videoFrame.yres != output->height) {
 		_isErrored = true;
 		_errorMessage = "TouchDesigner does not support the received video resolution (" + std::to_string(_videoFrame.xres) + "x" + std::to_string(_videoFrame.yres) + ").";
-		output->newCPUPixelDataLocation = -1;
 		NDIlib_recv_free_video_v2(_receiver, &_videoFrame);
 		_videoFrame.p_data = nullptr;
 		return;
@@ -225,7 +232,6 @@ NDIIn::execute(TOP_OutputFormatSpecs* output,
 	NDIlib_recv_free_video_v2(_receiver, &_videoFrame);
 	_videoFrame.p_data = nullptr;
 
-	output->newCPUPixelDataLocation = 0;
 }
 
 int32_t NDIIn::getNumInfoCHOPChans(void *reserved1)
@@ -289,12 +295,13 @@ void NDIIn::setupParameters(OP_ParameterManager* manager, void* reserved1)
 	activeToggle.name = "Active";
 	activeToggle.label = "Active";
 	activeToggle.page = "NDI In";
+	activeToggle.defaultValues[0] = 1;
 	manager->appendToggle(activeToggle);
 
 	OP_StringParameter sourceName;
 	sourceName.name = "Sourcename";
 	sourceName.label = "Source name";
-	sourceName.defaultValue = "";
+	sourceName.defaultValue = "TDNDI";
 	sourceName.page = "NDI In";
 	manager->appendString(sourceName);
 

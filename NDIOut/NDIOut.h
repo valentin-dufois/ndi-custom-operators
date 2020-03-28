@@ -71,6 +71,8 @@ private:
 
 	NDIlib_audio_frame_v2_t _audioFrame;
 
+	uint8_t* _dataBuffer = nullptr;
+
 	// MARK: - Validations & updates
 
 	std::string getGroups(const OP_Inputs* inputs);
