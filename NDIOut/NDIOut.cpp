@@ -224,12 +224,13 @@ void NDIOut::setupParameters(OP_ParameterManager* manager, void* reserved1)
 	activeToggle.name = "Active";
 	activeToggle.label = "Active";
 	activeToggle.page = "NDI Out";
+	activeToggle.defaultValues[0] = 1;
 	manager->appendToggle(activeToggle);
 
 	OP_StringParameter sourceName;
 	sourceName.name = "Sourcename";
 	sourceName.label = "Source name";
-	sourceName.defaultValue = "TouchDesigner";
+	sourceName.defaultValue = "TDNDI";
 	sourceName.page = "NDI Out";
 	manager->appendString(sourceName);
 

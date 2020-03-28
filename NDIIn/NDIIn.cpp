@@ -301,7 +301,7 @@ void NDIIn::setupParameters(OP_ParameterManager* manager, void* reserved1)
 	OP_StringParameter sourceName;
 	sourceName.name = "Sourcename";
 	sourceName.label = "Source name";
-	sourceName.defaultValue = "TDNDI";
+	sourceName.defaultValue = "";
 	sourceName.page = "NDI In";
 	manager->appendString(sourceName);
 
