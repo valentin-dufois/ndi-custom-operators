@@ -20,30 +20,30 @@ public:
     NDIIn(const OP_NodeInfo *info);
     virtual ~NDIIn();
 
-    virtual void		getGeneralInfo(TOP_GeneralInfo *, const OP_Inputs*, void*) override;
-    virtual bool		getOutputFormat(TOP_OutputFormat*, const OP_Inputs*, void*) override;
+    virtual void getGeneralInfo(TOP_GeneralInfo *, const OP_Inputs*, void*) override;
+    virtual bool getOutputFormat(TOP_OutputFormat*, const OP_Inputs*, void*) override;
 
 
-    virtual void		execute(TOP_OutputFormatSpecs*,
+    virtual void execute(TOP_OutputFormatSpecs*,
 							const OP_Inputs*,
 							TOP_Context* context,
 							void* reserved1) override;
 
-    virtual int32_t		getNumInfoCHOPChans(void *reserved1) override;
-    virtual void		getInfoCHOPChan(int32_t index,
+    virtual int32_t getNumInfoCHOPChans(void *reserved1) override;
+    virtual void getInfoCHOPChan(int32_t index,
 								OP_InfoCHOPChan *chan, void* reserved1) override;
 
-    virtual bool		getInfoDATSize(OP_InfoDATSize *infoSize, void *reserved1) override;
-    virtual void		getInfoDATEntries(int32_t index,
+    virtual bool getInfoDATSize(OP_InfoDATSize *infoSize, void *reserved1) override;
+    virtual void getInfoDATEntries(int32_t index,
 									int32_t nEntries,
 									OP_InfoDATEntries *entries,
 									void *reserved1) override;
 
-	virtual void		setupParameters(OP_ParameterManager *manager, void *reserved1) override;
-	virtual void		pulsePressed(const char *name, void *reserved1) override;
+	virtual void setupParameters(OP_ParameterManager *manager, void *reserved1) override;
+	virtual void pulsePressed(const char *name, void *reserved1) override;
 
-	virtual void 	getErrorString(OP_String *error, void *reserved1) override;
-	virtual void 	getWarningString(OP_String *warning, void *reserved1) override;
+	virtual void getErrorString(OP_String *error, void *reserved1) override;
+	virtual void getWarningString(OP_String *warning, void *reserved1) override;
 
 private:
 	// Our finder
@@ -63,9 +63,9 @@ private:
 		uint32_t sourcesCount;
 		std::vector<std::string> sourcesNames;
 		std::vector<std::string> sourcesAdresses;
-	} _state;
 
-	bool _isErrored = false;
-	std::string _errorMessage;
-	std::string _warningMessage;
+		bool isErrored = false;
+		std::string errorMessage;
+		std::string warningMessage;
+	} _state;
 };

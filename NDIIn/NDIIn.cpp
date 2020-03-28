@@ -22,8 +22,8 @@
 NDIIn::NDIIn(const OP_NodeInfo* info)
 {
 	if(!NDIlib_initialize()) {
-		_isErrored = true;
-		_errorMessage = "Could not initialized NDI. CPU may be unsupported.";
+		_state.isErrored = true;
+		_state.errorMessage = "Could not initialized NDI. CPU may be unsupported.";
 		return;
 	}
 }
@@ -38,152 +38,154 @@ NDIIn::~NDIIn()
 void
 NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* reserved1)
 {
-	ginfo->cookEveryFrame = true;
-	ginfo->memPixelType = OP_CPUMemPixelType::BGRA8Fixed;
-	ginfo->clearBuffers = true;
+	try {
+		ginfo->cookEveryFrame = true;
+		ginfo->memPixelType = OP_CPUMemPixelType::BGRA8Fixed;
+		ginfo->clearBuffers = true;
 
-	// get parameters
-	_params.active = inputs->getParInt("Active");
+		// get parameters
+		_params.active = inputs->getParInt("Active");
 
-	if(!_params.active) {
-		if(_receiver != nullptr) {
+		if (!_params.active) {
+			if (_receiver != nullptr) {
+				NDIlib_recv_destroy(_receiver);
+				_receiver = nullptr;
+			}
+
+			if (_finder != nullptr) {
+				NDIlib_find_destroy(_finder);
+				_finder = nullptr;
+			}
+
+			return;
+		}
+
+		// Bandwidth
+		std::string bandwidthParStr = inputs->getParString("Bandwidth");
+		NDIlib_recv_bandwidth_e bandwidthPar;
+
+		if (bandwidthParStr == "Low")
+			bandwidthPar = NDIlib_recv_bandwidth_lowest;
+		else // if(bandwidthParStr == "high")
+			bandwidthPar = NDIlib_recv_bandwidth_highest;
+
+		// Check if requested bandwidth has changed
+		if (bandwidthPar != _params.bandwidth && _receiver != nullptr) {
+			// Requested source has changed, close current connection
 			NDIlib_recv_destroy(_receiver);
 			_receiver = nullptr;
 		}
 
-		if(_finder != nullptr) {
-			NDIlib_find_destroy(_finder);
-			_finder = nullptr;
+		_params.bandwidth = bandwidthPar;
+
+		// Check if specified addition lookup ips changed
+		char additionalIPsPar[256];
+		strncpy(additionalIPsPar, inputs->getParString("Additionalips"), 256);
+		if (strcmp(_params.additionalIPs, additionalIPsPar) != 0) {
+			// Specified IP changed, close finder
+			if (_finder != nullptr) {
+				NDIlib_find_destroy(_finder);
+				_finder = nullptr;
+			}
+
+			strcpy(_params.additionalIPs, additionalIPsPar);
 		}
 
-		return;
-	}
-
-	std::string bandwidthParStr = inputs->getParString("Bandwidth");
-	NDIlib_recv_bandwidth_e bandwidthPar;
-
-	if(bandwidthParStr == "Low")
-		bandwidthPar = NDIlib_recv_bandwidth_lowest;
-	else // if(bandwidthParStr == "high")
-		bandwidthPar = NDIlib_recv_bandwidth_highest;
-
-	// Check if requested bandwidth has changed
-	if(bandwidthPar != _params.bandwidth && _receiver != nullptr) {
-		// Requested source has changed, close current connection
-		NDIlib_recv_destroy(_receiver);
-		_receiver = nullptr;
-	}
-
-	_params.bandwidth = bandwidthPar;
-
-	// Check if specified addition lookup ips changed
-	char additionalIPsPar[256];
-	strncpy(additionalIPsPar, inputs->getParString("Additionalips"), 256);
-	if(strcmp(_params.additionalIPs, additionalIPsPar) != 0) {
-		// Specified IP changed, close finder
-		if(_finder != nullptr) {
-			NDIlib_find_destroy(_finder);
-			_finder = nullptr;
+		// Do we have a finder ?
+		if (_finder == nullptr) {
+			NDIlib_find_create_t finderParams;
+			finderParams.p_extra_ips = _params.additionalIPs;
+			_finder = NDIlib_find_create2(&finderParams);
 		}
 
-		strcpy(_params.additionalIPs, additionalIPsPar);
-	}
+		const std::string sourceNamePar = inputs->getParString("Sourcename");
 
-	// Do we have a finder ?
-	if(_finder == nullptr) {
-		NDIlib_find_create_t finderParams;
-		finderParams.p_extra_ips = _params.additionalIPs;
-		_finder = NDIlib_find_create2(&finderParams);
-	}
+		// Check if requested source changed
+		if (sourceNamePar != _params.sourceName && _receiver != nullptr) {
+			// Requested source has changed, close current connection
+			NDIlib_recv_destroy(_receiver);
+		}
 
-	const std::string sourceNamePar = inputs->getParString("Sourcename");
+		_params.sourceName = sourceNamePar;
 
-	// Check if requested source changed
-	if(sourceNamePar != _params.sourceName && _receiver != nullptr) {
-		// Requested source has changed, close current connection
-		NDIlib_recv_destroy(_receiver);
-	}
+		// Check available sources
+		const NDIlib_source_t* sources = NDIlib_find_get_current_sources(_finder, &_state.sourcesCount);
 
-	_params.sourceName = sourceNamePar;
+		// Fill in the list of sources
+		_state.sourcesNames.clear();
+		_state.sourcesAdresses.clear();
+		_state.sourcesNames.reserve(_state.sourcesCount);
+		_state.sourcesAdresses.reserve(_state.sourcesCount);
 
-	// Check available sources
-	const NDIlib_source_t * sources = NDIlib_find_get_current_sources(_finder, &_state.sourcesCount);
+		for (uint32_t i = 0; i < _state.sourcesCount; ++i) {
+			_state.sourcesNames.push_back(sources[i].p_ndi_name);
+			_state.sourcesAdresses.push_back(sources[i].p_url_address);
+		}
 
-	// Fill in the list of sources
-	_state.sourcesNames.clear();
-	_state.sourcesAdresses.clear();
-	_state.sourcesNames.reserve(_state.sourcesCount);
-	_state.sourcesAdresses.reserve(_state.sourcesCount);
+		// Are we connected to a source ?
+		if (_receiver == nullptr) {
+			// No, check if one source match the requested one
+			for (uint32_t i = 0; i < _state.sourcesCount; ++i) {
 
-	for(uint32_t i = 0; i < _state.sourcesCount; ++i) {
-		_state.sourcesNames.push_back(sources[i].p_ndi_name);
-		_state.sourcesAdresses.push_back(sources[i].p_url_address);
-	}
+				if (sources[i].p_ndi_name != _params.sourceName)
+					continue;
 
-	// Are we connected to a source ?
-	if(_receiver == nullptr) {
-		// No, check if one source match the requested one
-		for(uint32_t i = 0; i < _state.sourcesCount; ++i) {
+				// Connect to the source
+				NDIlib_recv_create_v3_t receiverOptions;
+				receiverOptions.color_format = NDIlib_recv_color_format_BGRX_BGRA;
+				receiverOptions.allow_video_fields = false;
+				receiverOptions.bandwidth = _params.bandwidth;
+				receiverOptions.source_to_connect_to = *(sources + i);
 
-			if(sources[i].p_ndi_name != _params.sourceName)
-				continue;
+				_receiver = NDIlib_recv_create_v3(&receiverOptions);
 
-			// Connect to the source
-			NDIlib_recv_create_v3_t receiverOptions;
-			receiverOptions.color_format = NDIlib_recv_color_format_BGRX_BGRA;
-			receiverOptions.allow_video_fields = false;
-			receiverOptions.bandwidth = _params.bandwidth;
-			receiverOptions.source_to_connect_to = *(sources + i);
+				if (!_receiver) {
+					_state.isErrored = true;
+					_state.errorMessage = "Could not connect to source " + _params.sourceName + ".";
+					return;
+				}
+				_state.isErrored = false;
+				_state.warningMessage = "";
 
-			_receiver = NDIlib_recv_create_v3(&receiverOptions);
+				// we are connected, end here
+				break;
+			}
 
-			if(!_receiver) {
-				_isErrored = true;
-				_errorMessage = "Could not connect to source "+ _params.sourceName +".";
+			// Are we connected to a source now ?
+			if (_receiver == nullptr) {
+				// Still no connection, ends here
+				_state.warningMessage = "Looking for source " + _params.sourceName + "...";
 				return;
 			}
-			_isErrored = false;
-			_warningMessage = "";
-
-			// we are connected, end here
-			break;
 		}
 
-		// Are we connected to a source now ?
-		if(_receiver == nullptr) {
-			// Still no connection, ends here
-			_warningMessage = "Looking for source " + _params.sourceName + "...";
-			return;
-		}
+		// Get the latest frames
+		NDIlib_frame_type_e frameType = NDIlib_frame_type_none;
+
+		do {
+			frameType = NDIlib_recv_capture_v2(_receiver, &_videoFrame, nullptr, nullptr, 10);
+		} while (frameType != NDIlib_frame_type_none && frameType != NDIlib_frame_type_video);
+
+
+		ginfo->clearBuffers = false;
 	}
+	catch (std::runtime_error &exc) {
+		_state.isErrored = true;
+		_state.errorMessage = "An error occured with NDI : " + std::string(exc.what());
 
-	// Get the latest frames
-	NDIlib_frame_type_e frameType = NDIlib_frame_type_none;
-
-	do {
-		frameType = NDIlib_recv_capture_v2(_receiver, &_videoFrame, nullptr, nullptr, 10);
-	} while(frameType != NDIlib_frame_type_none && frameType != NDIlib_frame_type_video);
-
-
-	ginfo->clearBuffers = false;
+		ginfo->clearBuffers = true;
+	}
 }
 
 bool
 NDIIn::getOutputFormat(TOP_OutputFormat* format, const OP_Inputs* inputs, void* reserved1)
 {
-	// In this function we could assign variable values to 'format' to specify
-	// the pixel format/resolution etc that we want to output to.
-	// If we did that, we'd want to return true to tell the TOP to use the settings we've
-	// specified.
-	// In this example we'll return false and use the TOP's settings
-	if(_isErrored || _receiver == nullptr || !_params.active) {
+	// Are we able to output something ?
+	if(_state.isErrored || _receiver == nullptr || !_params.active) {
 		return false;
 	}
 
-	if(_videoFrame.data_size_in_bytes == 0) {
-		return false; // no frame
-	}
-
+	// Yes, set parameters to 8bits RGBA
 	format->redChannel = true;
 	format->greenChannel = true;
 	format->blueChannel = true;
@@ -195,16 +197,13 @@ NDIIn::getOutputFormat(TOP_OutputFormat* format, const OP_Inputs* inputs, void* 
 	return true;
 }
 
-void
-NDIIn::execute(TOP_OutputFormatSpecs* output,
-						const OP_Inputs* inputs,
-						TOP_Context *context,
-						void* reserved1)
+void NDIIn::execute(TOP_OutputFormatSpecs* output, const OP_Inputs* inputs, TOP_Context *context, void* reserved1)
 {
+	// Default output is the first provided buffer
 	output->newCPUPixelDataLocation = 0;
 
 	// Can we receive ?
-	if(_isErrored || _receiver == nullptr || !_params.active) {
+	if(_state.isErrored || _receiver == nullptr || !_params.active) {
 		return;
 	}
 
@@ -216,15 +215,15 @@ NDIIn::execute(TOP_OutputFormatSpecs* output,
 	// Is the received video frame supported ?
 	// We check against the TD-provided buffers as they will have different resolutions than the requested ones if we exceed the TD licence limitation.
 	if(_videoFrame.xres != output->width || _videoFrame.yres != output->height) {
-		_isErrored = true;
-		_errorMessage = "TouchDesigner does not support the received video resolution (" + std::to_string(_videoFrame.xres) + "x" + std::to_string(_videoFrame.yres) + ").";
+		_state.isErrored = true;
+		_state.errorMessage = "TouchDesigner does not support the received video resolution (" + std::to_string(_videoFrame.xres) + "x" + std::to_string(_videoFrame.yres) + ").";
 		NDIlib_recv_free_video_v2(_receiver, &_videoFrame);
 		_videoFrame.p_data = nullptr;
 		return;
 	}
 
 	// We're good
-	_isErrored = false;
+	_state.isErrored = false;
 
 	// Copy frame
 	memcpy_fast(output->cpuPixelData[0], _videoFrame.p_data, _videoFrame.xres * _videoFrame.yres * 4);
@@ -326,12 +325,12 @@ void NDIIn::pulsePressed(const char* name, void *reserved1)
 }
 
 void NDIIn::getErrorString(OP_String *error, void *reserved1) {
-	if(_isErrored)
-		error->setString(_errorMessage.c_str());
+	if(_state.isErrored)
+		error->setString(_state.errorMessage.c_str());
 }
 
 void NDIIn::getWarningString(OP_String *warning, void *reserved1) {
-	if(_warningMessage.size() != 0)
-		warning->setString(_warningMessage.c_str());
+	if(_state.warningMessage.size() != 0)
+		warning->setString(_state.warningMessage.c_str());
 }
 
