@@ -337,7 +337,7 @@ void NDIInCHOP::pollLoop() {
 		}
 
 		// Poll the NDI feed
-		frameType = NDIlib_recv_capture_v2(_receiver, nullptr, &_audioFrame, nullptr, 1);
+		frameType = NDIlib_recv_capture_v2(_receiver, nullptr, &_audioFrame, nullptr, 0);
 
 		if(frameType != NDIlib_frame_type_audio) {
 			_feedMutex.unlock();

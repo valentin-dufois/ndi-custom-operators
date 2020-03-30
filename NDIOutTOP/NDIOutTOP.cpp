@@ -8,7 +8,7 @@
 
 #include "NDIOutTOP.h"
 
-#include "FastMemcpy_Avx.h"
+#include "../Utils/fast_memcpy.h"
 
 #include <stdio.h>
 #include <string.h>
