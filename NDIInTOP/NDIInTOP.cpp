@@ -1,12 +1,12 @@
 //
-//  NDIIn.cpp
+//  NDIInTOP.cpp
 //  NDIInTOP
 //
 //  Created by Valentin Dufois on 2020-03-26.
 //  Copyright © 2020 Derivative. All rights reserved.
 //
 
-#include "NDIIn.h"
+#include "NDIInTOP.h"
 
 #include "FastMemcpy_Avx.h"
 
@@ -19,8 +19,7 @@
 
 #include <iostream>
 
-NDIIn::NDIIn(const OP_NodeInfo* info)
-{
+NDIInTOP::NDIInTOP(const OP_NodeInfo *) {
 	if(!NDIlib_initialize()) {
 		_state.isErrored = true;
 		_state.errorMessage = "Could not initialized NDI. CPU may be unsupported.";
@@ -28,20 +27,18 @@ NDIIn::NDIIn(const OP_NodeInfo* info)
 	}
 }
 
-NDIIn::~NDIIn()
-{
+NDIInTOP::~NDIInTOP() {
 	NDIlib_recv_destroy(_receiver);
 	NDIlib_find_destroy(_finder);
 	NDIlib_destroy();
 }
 
-void
-NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* reserved1)
-{
+void NDIInTOP::getGeneralInfo(TOP_GeneralInfo * ginfo,
+							const OP_Inputs * inputs,
+							void *) {
 	try {
-		ginfo->cookEveryFrame = true;
+		ginfo->cookEveryFrameIfAsked = true;
 		ginfo->memPixelType = OP_CPUMemPixelType::BGRA8Fixed;
-		ginfo->clearBuffers = true;
 
 		// get parameters
 		_params.active = inputs->getParInt("Active");
@@ -66,7 +63,7 @@ NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* res
 
 		if (bandwidthParStr == "Low")
 			bandwidthPar = NDIlib_recv_bandwidth_lowest;
-		else // if(bandwidthParStr == "high")
+		else  // if(bandwidthParStr == "high")
 			bandwidthPar = NDIlib_recv_bandwidth_highest;
 
 		// Check if requested bandwidth has changed
@@ -88,7 +85,7 @@ NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* res
 				_finder = nullptr;
 			}
 
-			strcpy(_params.additionalIPs, additionalIPsPar);
+			strlcpy(_params.additionalIPs, additionalIPsPar, 256);
 		}
 
 		// Do we have a finder ?
@@ -126,7 +123,6 @@ NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* res
 		if (_receiver == nullptr) {
 			// No, check if one source match the requested one
 			for (uint32_t i = 0; i < _state.sourcesCount; ++i) {
-
 				if (sources[i].p_ndi_name != _params.sourceName)
 					continue;
 
@@ -168,8 +164,7 @@ NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* res
 
 
 		ginfo->clearBuffers = false;
-	}
-	catch (std::runtime_error &exc) {
+	} catch (std::runtime_error &exc) {
 		_state.isErrored = true;
 		_state.errorMessage = "An error occured with NDI : " + std::string(exc.what());
 
@@ -177,9 +172,8 @@ NDIIn::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* res
 	}
 }
 
-bool
-NDIIn::getOutputFormat(TOP_OutputFormat* format, const OP_Inputs* inputs, void* reserved1)
-{
+bool NDIInTOP::getOutputFormat(TOP_OutputFormat * format,
+							 const OP_Inputs *, void *) {
 	// Are we able to output something ?
 	if(_state.isErrored || _receiver == nullptr || !_params.active) {
 		return false;
@@ -197,13 +191,14 @@ NDIIn::getOutputFormat(TOP_OutputFormat* format, const OP_Inputs* inputs, void* 
 	return true;
 }
 
-void NDIIn::execute(TOP_OutputFormatSpecs* output, const OP_Inputs* inputs, TOP_Context *context, void* reserved1)
-{
+void NDIInTOP::execute(TOP_OutputFormatSpecs * output,
+					  const OP_Inputs *, TOP_Context *, void *) {
 	// Default output is the first provided buffer
 	output->newCPUPixelDataLocation = 0;
 
 	// Can we receive ?
 	if(_state.isErrored || _receiver == nullptr || !_params.active) {
+		memset(output->cpuPixelData[0], 0, output->width * output->height);
 		return;
 	}
 
@@ -230,28 +225,25 @@ void NDIIn::execute(TOP_OutputFormatSpecs* output, const OP_Inputs* inputs, TOP_
 
 	NDIlib_recv_free_video_v2(_receiver, &_videoFrame);
 	_videoFrame.p_data = nullptr;
-
 }
 
-int32_t NDIIn::getNumInfoCHOPChans(void *reserved1)
-{
+int32_t NDIInTOP::getNumInfoCHOPChans(void *) {
 	// We return the number of channel we want to output to any Info CHOP
 	// connected, num_sources
 	return 3;
 }
 
-void NDIIn::getInfoCHOPChan(int32_t index, OP_InfoCHOPChan* chan, void* reserved1)
-{
+void NDIInTOP::getInfoCHOPChan(int32_t index, OP_InfoCHOPChan * chan, void *) {
 	switch (index) {
-		case 0: // connected
+		case 0:  // connected
 			chan->name->setString("connected");
 			chan->value = _receiver != nullptr;
 			break;
-		case 1: // num_sources
+		case 1:  // num_sources
 			chan->name->setString("num_sources");
 			chan->value = _state.sourcesCount;
 			break;
-		case 2: // fps
+		case 2:  // fps
 			chan->name->setString("received_fps");
 			if(_receiver == nullptr)
 				chan->value = 0;
@@ -261,8 +253,7 @@ void NDIIn::getInfoCHOPChan(int32_t index, OP_InfoCHOPChan* chan, void* reserved
 	}
 }
 
-bool	NDIIn::getInfoDATSize(OP_InfoDATSize* infoSize, void* reserved1)
-{
+bool	NDIInTOP::getInfoDATSize(OP_InfoDATSize * infoSize, void *) {
 	infoSize->rows = _state.sourcesCount + 1;
 	infoSize->cols = 2;
 	// Setting this to false means we'll be assigning values to the table
@@ -271,11 +262,8 @@ bool	NDIIn::getInfoDATSize(OP_InfoDATSize* infoSize, void* reserved1)
 	return true;
 }
 
-void NDIIn::getInfoDATEntries(int32_t index,
-								int32_t nEntries,
-								OP_InfoDATEntries* entries,
-								void *reserved1)
-{
+void NDIInTOP::getInfoDATEntries(int32_t index, int32_t,
+							   OP_InfoDATEntries * entries, void *) {
 	if(index == 0) {
 		entries->values[0]->setString("Sources");
 		entries->values[1]->setString("Addresses");
@@ -288,8 +276,7 @@ void NDIIn::getInfoDATEntries(int32_t index,
 
 
 // Override these methods if you want to define specfic parameters
-void NDIIn::setupParameters(OP_ParameterManager* manager, void* reserved1)
-{
+void NDIInTOP::setupParameters(OP_ParameterManager * manager, void *) {
 	OP_NumericParameter activeToggle;
 	activeToggle.name = "Active";
 	activeToggle.label = "Active";
@@ -319,17 +306,12 @@ void NDIIn::setupParameters(OP_ParameterManager* manager, void* reserved1)
 	manager->appendMenu(bandwidth, 2, bandwidthValues, bandwidthValues);
 }
 
-void NDIIn::pulsePressed(const char* name, void *reserved1)
-{
-
-}
-
-void NDIIn::getErrorString(OP_String *error, void *reserved1) {
+void NDIInTOP::getErrorString(OP_String * error, void *) {
 	if(_state.isErrored)
 		error->setString(_state.errorMessage.c_str());
 }
 
-void NDIIn::getWarningString(OP_String *warning, void *reserved1) {
+void NDIInTOP::getWarningString(OP_String * warning, void *) {
 	if(_state.warningMessage.size() != 0)
 		warning->setString(_state.warningMessage.c_str());
 }

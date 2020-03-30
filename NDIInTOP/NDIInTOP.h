@@ -1,5 +1,5 @@
 //
-//  NDIIn.h
+//  NDIInTOP.h
 //  NDIInTOP
 //
 //  Created by Valentin Dufois on 2020-03-26.
@@ -8,17 +8,16 @@
 
 #include <string>
 #include <vector>
-#include "../third-parties/concurrentqueue.h"
 
 #include "../third-parties/TOP_CPlusPlusBase.h"
 
 #include <Processing.NDI.Lib.h>
 
-class NDIIn : public TOP_CPlusPlusBase
+class NDIInTOP : public TOP_CPlusPlusBase
 {
 public:
-    NDIIn(const OP_NodeInfo *info);
-    virtual ~NDIIn();
+    NDIInTOP(const OP_NodeInfo *info);
+    virtual ~NDIInTOP();
 
     virtual void getGeneralInfo(TOP_GeneralInfo *, const OP_Inputs*, void*) override;
     virtual bool getOutputFormat(TOP_OutputFormat*, const OP_Inputs*, void*) override;
@@ -40,7 +39,6 @@ public:
 									void *reserved1) override;
 
 	virtual void setupParameters(OP_ParameterManager *manager, void *reserved1) override;
-	virtual void pulsePressed(const char *name, void *reserved1) override;
 
 	virtual void getErrorString(OP_String *error, void *reserved1) override;
 	virtual void getWarningString(OP_String *warning, void *reserved1) override;

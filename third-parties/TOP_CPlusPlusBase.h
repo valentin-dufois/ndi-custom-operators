@@ -447,7 +447,7 @@ public:
 	// Some general settings can be assigned here by setting memebers of
 	// the TOP_GeneralInfo class that is passed in
 	virtual void
-	getGeneralInfo(TOP_GeneralInfo*, const OP_Inputs*, void *reserved1)
+	getGeneralInfo(TOP_GeneralInfo*, const OP_Inputs*, void *)
 	{
 	}
 
@@ -461,8 +461,7 @@ public:
 	// The TOP_OutputFormat class is pre-filled with what the TOP would
 	// output if you return false, so you can just tweak a few settings
 	// and return true if you want
-	virtual bool
-	getOutputFormat(TOP_OutputFormat*, const OP_Inputs*, void* reserved1)
+	virtual bool getOutputFormat(TOP_OutputFormat *, const OP_Inputs *, void *)
 	{
 		return false;
 	}
@@ -472,17 +471,16 @@ public:
 	// See the OP_Inputs class definition for more details on it's
 	// contents
 
-	virtual void		execute(TOP_OutputFormatSpecs*,
-								const OP_Inputs* ,
-								TOP_Context* context,
-								void* reserved1) = 0;
+	virtual void	execute(TOP_OutputFormatSpecs *,
+						const OP_Inputs *,
+						TOP_Context *,
+						void *) = 0;
 
 
 	// Override these methods if you want to output values to the Info CHOP/DAT
 	// returning 0 means you dont plan to output any Info CHOP channels
 
-	virtual int32_t		
-	getNumInfoCHOPChans(void* reserved1)
+	virtual int32_t getNumInfoCHOPChans(void *)
 	{
 		return 0;
 	}
@@ -491,8 +489,7 @@ public:
 	// by assigning something to 'name' and 'value' members of the
 	// OP_InfoCHOPChan class pointer that is passed in.
 	virtual void
-	getInfoCHOPChan(int32_t index, OP_InfoCHOPChan* chan,
-										void* reserved1)
+	getInfoCHOPChan(int32_t, OP_InfoCHOPChan *, void *)
 	{
 	}
 
@@ -501,7 +498,7 @@ public:
 	// Return true if you are.
 	// Fill in members of the OP_InfoDATSize class to specify the size
 	virtual bool
-	getInfoDATSize(OP_InfoDATSize* infoSize, void* reserved1)
+	getInfoDATSize(OP_InfoDATSize *, void *)
 	{
 		return false;
 	}
@@ -512,46 +509,39 @@ public:
 	// 'index' is the row/column index
 	// 'nEntries' is the number of entries in the row/column
 	// Strings should be UTF-8 encoded.
-	virtual void
-	getInfoDATEntries(int32_t index, int32_t nEntries,
-											OP_InfoDATEntries* entries,
-											void *reserved1)
+	virtual void getInfoDATEntries(int32_t, int32_t, OP_InfoDATEntries *, void *)
 	{
 	}
 
 	// You can use this function to put the node into a warning state
 	// with the returned string as the message.
-	virtual void
-	getWarningString(OP_String *warning, void *reserved1)
+	virtual void getWarningString(OP_String *, void *)
 	{
 	}
 
 	// You can use this function to put the node into a error state
 	// with the returned string as the message.
-	virtual void
-	getErrorString(OP_String *error, void *reserved1)
+	virtual void getErrorString(OP_String *, void *)
 	{
 	}
 
 	// Use this function to return some text that will show up in the
 	// info popup (when you middle click on a node)
-	virtual void
-	getInfoPopupString(OP_String *info, void *reserved1)
+	virtual void getInfoPopupString(OP_String *, void *)
 	{
 	}
 
 
 
 	// Override these methods if you want to define specfic parameters
-	virtual void
-	setupParameters(OP_ParameterManager* manager, void* reserved1)
+	virtual void setupParameters(OP_ParameterManager *, void *)
 	{
 	}
 
 
 	// This is called whenever a pulse parameter is pressed
 	virtual void		
-	pulsePressed(const char* name, void* reserved1)
+	pulsePressed(const char *, void *)
 	{
 	}
 

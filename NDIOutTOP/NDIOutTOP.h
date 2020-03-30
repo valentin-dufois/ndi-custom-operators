@@ -1,5 +1,5 @@
 //
-//  NDIOut.h
+//  NDIOutTOP.h
 //  NDIOutTOP
 //
 //  Created by Valentin Dufois on 2020-03-26.
@@ -9,16 +9,15 @@
 #include <string>
 #include <future>
 
-#include "../third-parties/concurrentqueue.h"
 #include "../third-parties/TOP_CPlusPlusBase.h"
 
 #include <Processing.NDI.Lib.h>
 
-class NDIOut : public TOP_CPlusPlusBase
+class NDIOutTOP : public TOP_CPlusPlusBase
 {
 public:
-    NDIOut(const OP_NodeInfo *info);
-    virtual ~NDIOut();
+    NDIOutTOP(const OP_NodeInfo *info);
+    virtual ~NDIOutTOP();
 
     virtual void getGeneralInfo(TOP_GeneralInfo *, const OP_Inputs*, void*) override;
     virtual bool getOutputFormat(TOP_OutputFormat*, const OP_Inputs*, void*) override;
@@ -29,10 +28,8 @@ public:
     virtual void getInfoCHOPChan(int32_t index, OP_InfoCHOPChan *chan, void* reserved1) override;
 
     virtual bool getInfoDATSize(OP_InfoDATSize *infoSize, void *reserved1) override;
-    virtual void getInfoDATEntries(int32_t index, int32_t nEntries, OP_InfoDATEntries *entries, void *reserved1) override;
 
 	virtual void setupParameters(OP_ParameterManager *manager, void *reserved1) override;
-	virtual void pulsePressed(const char *name, void *reserved1) override;
 
 	virtual void getErrorString(OP_String *error, void *reserved1) override;
 

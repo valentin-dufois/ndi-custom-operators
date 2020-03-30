@@ -6,15 +6,10 @@
 //  Copyright © 2020 Derivative. All rights reserved.
 //
 
-#include "NDIOut.h"
+#include "NDIOutTOP.h"
 
-extern "C"
-{
-
-DLLEXPORT
-void
-FillTOPPluginInfo(TOP_PluginInfo *info)
-{
+extern "C" {
+DLLEXPORT void FillTOPPluginInfo(TOP_PluginInfo *info) {
 	// This must always be set to this constant
 	info->apiVersion = TOPCPlusPlusAPIVersion;
 
@@ -41,23 +36,11 @@ FillTOPPluginInfo(TOP_PluginInfo *info)
 	info->customOPInfo.maxInputs = 1;
 }
 
-DLLEXPORT
-TOP_CPlusPlusBase*
-CreateTOPInstance(const OP_NodeInfo* info, TOP_Context* context)
-{
-	// Return a new instance of your class every time this is called.
-	// It will be called once per TOP that is using the .dll
-	return new NDIOut(info);
+DLLEXPORT TOP_CPlusPlusBase* CreateTOPInstance(const OP_NodeInfo * info, TOP_Context *) {
+	return new NDIOutTOP(info);
 }
 
-DLLEXPORT
-void
-DestroyTOPInstance(TOP_CPlusPlusBase* instance, TOP_Context *context)
-{
-	// Delete the instance here, this will be called when
-	// Touch is shutting down, when the TOP using that instance is deleted, or
-	// if the TOP loads a different DLL
-	delete (NDIOut*)instance;
+DLLEXPORT void DestroyTOPInstance(TOP_CPlusPlusBase * instance, TOP_Context *) {
+	delete reinterpret_cast<NDIOutTOP *>(instance);
 }
-
 };

@@ -10,11 +10,18 @@
 		396844DF242D3909005FE0E7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396844DE242D3909005FE0E7 /* main.cpp */; };
 		396844E7242D3DD7005FE0E7 /* libndi.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 39F250D12420204500C59436 /* libndi.4.dylib */; };
 		396844E9242D3DD7005FE0E7 /* libndi.4.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 39F250D12420204500C59436 /* libndi.4.dylib */; };
+		39A903A3242FC4500088CBE4 /* NDIOutTOP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39A903A1242FC4500088CBE4 /* NDIOutTOP.cpp */; };
+		39A903A6242FC5400088CBE4 /* NDIInTOP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396844F1242D3E29005FE0E7 /* NDIInTOP.cpp */; };
+		39A903A7242FC5400088CBE4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396844EF242D3E23005FE0E7 /* main.cpp */; };
+		39A903A9242FC5400088CBE4 /* libndi.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 39F250D12420204500C59436 /* libndi.4.dylib */; };
+		39A903AB242FC5400088CBE4 /* libndi.4.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 39F250D12420204500C59436 /* libndi.4.dylib */; };
+		39A903B4242FC6C60088CBE4 /* NDIInCHOP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39A903B2242FC6C60088CBE4 /* NDIInCHOP.cpp */; };
+		39A903B6242FCF120088CBE4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39A903B1242FC6BA0088CBE4 /* main.cpp */; };
 		39B121E4242D40070070A1F8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396844EF242D3E23005FE0E7 /* main.cpp */; };
-		39B121E5242D40070070A1F8 /* NDIIn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396844F1242D3E29005FE0E7 /* NDIIn.cpp */; };
+		39B121E5242D40070070A1F8 /* NDIInTOP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 396844F1242D3E29005FE0E7 /* NDIInTOP.cpp */; };
+		39B14FAA243023CC00F5B49D /* ringbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 39B14FA8243023CB00F5B49D /* ringbuffer.cpp */; };
 		39F250D22420204500C59436 /* libndi.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 39F250D12420204500C59436 /* libndi.4.dylib */; };
 		39F250D32420205D00C59436 /* libndi.4.dylib in Resources */ = {isa = PBXBuildFile; fileRef = 39F250D12420204500C59436 /* libndi.4.dylib */; };
-		E278881E1E002FC1002C9CEE /* NDIOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E278881B1E002FC1002C9CEE /* NDIOut.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,17 +29,25 @@
 		396844ED242D3DD7005FE0E7 /* NDIInTOP.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NDIInTOP.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		396844EF242D3E23005FE0E7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		396844F0242D3E29005FE0E7 /* TOP_CPlusPlusBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TOP_CPlusPlusBase.h; sourceTree = "<group>"; };
-		396844F1242D3E29005FE0E7 /* NDIIn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NDIIn.cpp; sourceTree = "<group>"; };
+		396844F1242D3E29005FE0E7 /* NDIInTOP.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NDIInTOP.cpp; sourceTree = "<group>"; };
 		396844F2242D3E29005FE0E7 /* CPlusPlus_Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPlusPlus_Common.h; sourceTree = "<group>"; };
-		396844F3242D3E29005FE0E7 /* NDIIn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NDIIn.h; sourceTree = "<group>"; };
-		39A1B0B5242EBE8800AC0904 /* FastMemcpy_Avx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FastMemcpy_Avx.h; sourceTree = "<group>"; };
+		396844F3242D3E29005FE0E7 /* NDIInTOP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NDIInTOP.h; sourceTree = "<group>"; };
+		39A1B0B5242EBE8800AC0904 /* fast_memcpy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fast_memcpy.h; sourceTree = "<group>"; };
 		39A1B0B6242EC26200AC0904 /* FastMemcpy_Avx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FastMemcpy_Avx.h; sourceTree = "<group>"; };
+		39A903A1242FC4500088CBE4 /* NDIOutTOP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDIOutTOP.cpp; sourceTree = "<group>"; };
+		39A903A2242FC4500088CBE4 /* NDIOutTOP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDIOutTOP.h; sourceTree = "<group>"; };
+		39A903AF242FC5400088CBE4 /* NDIInCHOP.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NDIInCHOP.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		39A903B1242FC6BA0088CBE4 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		39A903B2242FC6C60088CBE4 /* NDIInCHOP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NDIInCHOP.cpp; sourceTree = "<group>"; };
+		39A903B3242FC6C60088CBE4 /* NDIInCHOP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NDIInCHOP.h; sourceTree = "<group>"; };
+		39A903B5242FC9A80088CBE4 /* CHOP_CPlusPlusBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHOP_CPlusPlusBase.h; sourceTree = "<group>"; };
+		39B14FA8243023CB00F5B49D /* ringbuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ringbuffer.cpp; sourceTree = "<group>"; };
+		39B14FA9243023CB00F5B49D /* ringbuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ringbuffer.hpp; sourceTree = "<group>"; };
+		39B14FAD2431560A00F5B49D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		39B14FAE2431560C00F5B49D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39F250D12420204500C59436 /* libndi.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libndi.4.dylib; path = ../../../../../../usr/local/lib/libndi.4.dylib; sourceTree = "<group>"; };
-		39F250D42420311500C59436 /* concurrentqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrentqueue.h; sourceTree = "<group>"; };
 		E27888111E002F6C002C9CEE /* NDIOutTOP.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NDIOutTOP.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27888141E002F6C002C9CEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E278881B1E002FC1002C9CEE /* NDIOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NDIOut.cpp; path = NDIOut/NDIOut.cpp; sourceTree = SOURCE_ROOT; };
-		E278881C1E002FC1002C9CEE /* NDIOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NDIOut.h; path = NDIOut/NDIOut.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +56,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				396844E7242D3DD7005FE0E7 /* libndi.4.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		39A903A8242FC5400088CBE4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39A903A9242FC5400088CBE4 /* libndi.4.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,37 +78,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		396844E0242D3DA8005FE0E7 /* NDIOut */ = {
+		396844E0242D3DA8005FE0E7 /* NDIOutTOP */ = {
 			isa = PBXGroup;
 			children = (
-				39A1B0B5242EBE8800AC0904 /* FastMemcpy_Avx.h */,
 				E27888141E002F6C002C9CEE /* Info.plist */,
 				396844DE242D3909005FE0E7 /* main.cpp */,
-				E278881B1E002FC1002C9CEE /* NDIOut.cpp */,
-				E278881C1E002FC1002C9CEE /* NDIOut.h */,
+				39A903A2242FC4500088CBE4 /* NDIOutTOP.h */,
+				39A903A1242FC4500088CBE4 /* NDIOutTOP.cpp */,
 			);
-			path = NDIOut;
+			path = NDIOutTOP;
 			sourceTree = "<group>";
 		};
-		396844EE242D3E1B005FE0E7 /* NDIIn */ = {
+		396844EE242D3E1B005FE0E7 /* NDIInTOP */ = {
 			isa = PBXGroup;
 			children = (
+				39B14FAD2431560A00F5B49D /* Info.plist */,
 				396844EF242D3E23005FE0E7 /* main.cpp */,
-				396844F1242D3E29005FE0E7 /* NDIIn.cpp */,
-				396844F3242D3E29005FE0E7 /* NDIIn.h */,
+				396844F1242D3E29005FE0E7 /* NDIInTOP.cpp */,
+				396844F3242D3E29005FE0E7 /* NDIInTOP.h */,
 				39A1B0B6242EC26200AC0904 /* FastMemcpy_Avx.h */,
 			);
-			path = NDIIn;
+			path = NDIInTOP;
 			sourceTree = "<group>";
 		};
 		396844F4242D3EC6005FE0E7 /* third-parties */ = {
 			isa = PBXGroup;
 			children = (
+				39A903B5242FC9A80088CBE4 /* CHOP_CPlusPlusBase.h */,
 				396844F2242D3E29005FE0E7 /* CPlusPlus_Common.h */,
 				396844F0242D3E29005FE0E7 /* TOP_CPlusPlusBase.h */,
-				39F250D42420311500C59436 /* concurrentqueue.h */,
 			);
 			path = "third-parties";
+			sourceTree = "<group>";
+		};
+		39A903B0242FC6A40088CBE4 /* NDIInCHOP */ = {
+			isa = PBXGroup;
+			children = (
+				39B14FAE2431560C00F5B49D /* Info.plist */,
+				39A903B2242FC6C60088CBE4 /* NDIInCHOP.cpp */,
+				39A903B3242FC6C60088CBE4 /* NDIInCHOP.h */,
+				39A903B1242FC6BA0088CBE4 /* main.cpp */,
+			);
+			path = NDIInCHOP;
+			sourceTree = "<group>";
+		};
+		39B14FAB2431545400F5B49D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				39B14FA8243023CB00F5B49D /* ringbuffer.cpp */,
+				39B14FA9243023CB00F5B49D /* ringbuffer.hpp */,
+				39A1B0B5242EBE8800AC0904 /* fast_memcpy.h */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		39F250D02420204500C59436 /* Frameworks */ = {
@@ -99,11 +143,13 @@
 		E27888081E002F6C002C9CEE = {
 			isa = PBXGroup;
 			children = (
-				396844F4242D3EC6005FE0E7 /* third-parties */,
-				396844EE242D3E1B005FE0E7 /* NDIIn */,
-				396844E0242D3DA8005FE0E7 /* NDIOut */,
-				E27888121E002F6C002C9CEE /* Products */,
+				39B14FAB2431545400F5B49D /* Utils */,
 				39F250D02420204500C59436 /* Frameworks */,
+				39A903B0242FC6A40088CBE4 /* NDIInCHOP */,
+				396844EE242D3E1B005FE0E7 /* NDIInTOP */,
+				396844E0242D3DA8005FE0E7 /* NDIOutTOP */,
+				E27888121E002F6C002C9CEE /* Products */,
+				396844F4242D3EC6005FE0E7 /* third-parties */,
 			);
 			sourceTree = "<group>";
 		};
@@ -112,6 +158,7 @@
 			children = (
 				E27888111E002F6C002C9CEE /* NDIOutTOP.plugin */,
 				396844ED242D3DD7005FE0E7 /* NDIInTOP.plugin */,
+				39A903AF242FC5400088CBE4 /* NDIInCHOP.plugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,6 +181,23 @@
 			name = NDIInTOP;
 			productName = CPUMemoryTOP;
 			productReference = 396844ED242D3DD7005FE0E7 /* NDIInTOP.plugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+		39A903A4242FC5400088CBE4 /* NDIInCHOP */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 39A903AC242FC5400088CBE4 /* Build configuration list for PBXNativeTarget "NDIInCHOP" */;
+			buildPhases = (
+				39A903A5242FC5400088CBE4 /* Sources */,
+				39A903A8242FC5400088CBE4 /* Frameworks */,
+				39A903AA242FC5400088CBE4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NDIInCHOP;
+			productName = CPUMemoryTOP;
+			productReference = 39A903AF242FC5400088CBE4 /* NDIInCHOP.plugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 		E27888101E002F6C002C9CEE /* NDIOutTOP */ = {
@@ -183,6 +247,7 @@
 			targets = (
 				E27888101E002F6C002C9CEE /* NDIOutTOP */,
 				396844E2242D3DD7005FE0E7 /* NDIInTOP */,
+				39A903A4242FC5400088CBE4 /* NDIInCHOP */,
 			);
 		};
 /* End PBXProject section */
@@ -193,6 +258,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				396844E9242D3DD7005FE0E7 /* libndi.4.dylib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		39A903AA242FC5400088CBE4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39A903AB242FC5400088CBE4 /* libndi.4.dylib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,8 +284,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39B121E5242D40070070A1F8 /* NDIIn.cpp in Sources */,
+				39B121E5242D40070070A1F8 /* NDIInTOP.cpp in Sources */,
 				39B121E4242D40070070A1F8 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		39A903A5242FC5400088CBE4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				39A903A6242FC5400088CBE4 /* NDIInTOP.cpp in Sources */,
+				39B14FAA243023CC00F5B49D /* ringbuffer.cpp in Sources */,
+				39A903B4242FC6C60088CBE4 /* NDIInCHOP.cpp in Sources */,
+				39A903B6242FCF120088CBE4 /* main.cpp in Sources */,
+				39A903A7242FC5400088CBE4 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,8 +305,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39A903A3242FC4500088CBE4 /* NDIOutTOP.cpp in Sources */,
 				396844DF242D3909005FE0E7 /* main.cpp in Sources */,
-				E278881E1E002FC1002C9CEE /* NDIOut.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,9 +320,8 @@
 				INSTALL_PATH = /;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.derivative.cpp.CPUMemoryTOP;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.valentindufois.td.ndiintop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SYSTEM_HEADER_SEARCH_PATHS = "\"/Library/NDI SDK for Apple/include\"";
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Debug;
@@ -249,9 +333,34 @@
 				INSTALL_PATH = /;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.derivative.cpp.CPUMemoryTOP;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.valentindufois.td.ndiintop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SYSTEM_HEADER_SEARCH_PATHS = "\"/Library/NDI SDK for Apple/include\"";
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Release;
+		};
+		39A903AD242FC5400088CBE4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INSTALL_PATH = /;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.valentindufois.td.ndiinchop;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = plugin;
+			};
+			name = Debug;
+		};
+		39A903AE242FC5400088CBE4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INSTALL_PATH = /;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.valentindufois.td.ndiinchop;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Release;
@@ -262,7 +371,9 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -275,6 +386,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_FLOAT_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
@@ -282,17 +394,20 @@
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_SEMICOLON_BEFORE_METHOD_BODY = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -300,16 +415,27 @@
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-march=core-avx-i";
 				SDKROOT = macosx;
+				SYSTEM_HEADER_SEARCH_PATHS = "/usr/local/include \"/Library/NDI SDK for Apple/include\"";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = v;
 			};
 			name = Debug;
 		};
@@ -319,7 +445,9 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
+				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -332,6 +460,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_FLOAT_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
@@ -339,27 +468,43 @@
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_SEMICOLON_BEFORE_METHOD_BODY = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES_ERROR;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLANG_WARN__EXIT_TIME_DESTRUCTORS = YES;
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = "-march=core-avx-i";
 				SDKROOT = macosx;
+				SYSTEM_HEADER_SEARCH_PATHS = "/usr/local/include \"/Library/NDI SDK for Apple/include\"";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = v;
 			};
 			name = Release;
 		};
@@ -367,13 +512,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/NDIOut/Info.plist";
 				INSTALL_PATH = /;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.derivative.cpp.CPUMemoryTOP;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.valentindufois.td.ndiouttop;
 				PRODUCT_NAME = NDIOutTOP;
-				SYSTEM_HEADER_SEARCH_PATHS = "\"/Library/NDI SDK for Apple/include\"";
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Debug;
@@ -382,13 +525,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/NDIOut/Info.plist";
 				INSTALL_PATH = /;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = ca.derivative.cpp.CPUMemoryTOP;
+				PRODUCT_BUNDLE_IDENTIFIER = fr.valentindufois.td.ndiouttop;
 				PRODUCT_NAME = NDIOutTOP;
-				SYSTEM_HEADER_SEARCH_PATHS = "\"/Library/NDI SDK for Apple/include\"";
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Release;
@@ -401,6 +542,15 @@
 			buildConfigurations = (
 				396844EB242D3DD7005FE0E7 /* Debug */,
 				396844EC242D3DD7005FE0E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		39A903AC242FC5400088CBE4 /* Build configuration list for PBXNativeTarget "NDIInCHOP" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				39A903AD242FC5400088CBE4 /* Debug */,
+				39A903AE242FC5400088CBE4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,12 +1,12 @@
 //
-//  NDIOut.cpp
+//  NDIOutTOP.cpp
 //  NDIOutTOP
 //
 //  Created by Valentin Dufois on 2020-03-26.
 //  Copyright © 2020 Derivative. All rights reserved.
 //
 
-#include "NDIOut.h"
+#include "NDIOutTOP.h"
 
 #include "FastMemcpy_Avx.h"
 
@@ -19,8 +19,7 @@
 
 #include <iostream>
 
-NDIOut::NDIOut(const OP_NodeInfo* info)
-{
+NDIOutTOP::NDIOutTOP(const OP_NodeInfo *) {
 	if(!NDIlib_initialize()) {
 		_isErrored = true;
 		_errorMessage = "Could not initialized NDI. CPU may be unsupported.";
@@ -40,22 +39,18 @@ NDIOut::NDIOut(const OP_NodeInfo* info)
 	_audioFrame.p_data = nullptr;
 }
 
-NDIOut::~NDIOut()
-{
+NDIOutTOP::~NDIOutTOP() {
 	NDIlib_send_destroy(_feed);
 	NDIlib_destroy();
 }
 
-void
-NDIOut::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* reserved1)
-{
+void NDIOutTOP::getGeneralInfo(TOP_GeneralInfo * ginfo, const OP_Inputs * inputs, void *) {
 	ginfo->cookEveryFrame = true;
 	ginfo->memPixelType = OP_CPUMemPixelType::BGRA8Fixed;
-//	ginfo->clearBuffers = false;
 
 	// get parameters
 	_params.active = inputs->getParInt("Active");
-	_params.fps = inputs->getTimeInfo()->rate;
+	_params.fps = static_cast<std::uint8_t>(inputs->getTimeInfo()->rate);
 
 	std::string parGroups = getGroups(inputs);
 	std::string parSourceName = inputs->getParString("Sourcename");
@@ -98,7 +93,7 @@ NDIOut::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* re
 	// Update the feed metadata
 	NDIlib_send_clear_connection_metadata(_feed);
 
-	_feedMetadata.timecode = inputs->getTimeInfo()->absFrame / inputs->getTimeInfo()->rate;
+	_feedMetadata.timecode = (std::uint32_t)(inputs->getTimeInfo()->absFrame / inputs->getTimeInfo()->rate);
 
 	const OP_DATInput * metadataDAT = inputs->getParDAT("Metadatadat");
 	if(metadataDAT) {
@@ -107,38 +102,27 @@ NDIOut::getGeneralInfo(TOP_GeneralInfo* ginfo, const OP_Inputs* inputs, void* re
 	}
 }
 
-bool
-NDIOut::getOutputFormat(TOP_OutputFormat* format, const OP_Inputs* inputs, void* reserved1)
-{
-	// In this function we could assign variable values to 'format' to specify
-	// the pixel format/resolution etc that we want to output to.
-	// If we did that, we'd want to return true to tell the TOP to use the settings we've
-	// specified.
-	// In this example we'll return false and use the TOP's settings
-
+bool NDIOutTOP::getOutputFormat(TOP_OutputFormat *, const OP_Inputs *, void *) {
 	return false;
 }
 
 
-void
-NDIOut::execute(TOP_OutputFormatSpecs* output,
-						const OP_Inputs* inputs,
-						TOP_Context *context,
-						void* reserved1)
-{
-	if(_isErrored) {
+void NDIOutTOP::execute(TOP_OutputFormatSpecs * output, const OP_Inputs * inputs,
+						TOP_Context *, void *) {
+	if(_isErrored)
 		return;
-	}
 
 	// Send audio
 	const OP_CHOPInput * audioCHOP = inputs->getParCHOP("Audiochop");
+
 	if(audioCHOP && audioCHOP->numChannels * audioCHOP->numSamples != 0) {
 		constexpr size_t floatSize = sizeof(float);
 
 		// Fill the frame
-		_audioFrame.sample_rate = audioCHOP->sampleRate;
+		_audioFrame.sample_rate = static_cast<int>(audioCHOP->sampleRate);
 		_audioFrame.no_channels = audioCHOP->numChannels;
 		_audioFrame.no_samples = audioCHOP->numSamples;
+		_audioFrame.timecode = static_cast<std::int64_t>(audioCHOP->startIndex);
 		_audioFrame.channel_stride_in_bytes = floatSize * audioCHOP->numSamples;
 
 		_audioFrame.p_data = const_cast<float *>(audioCHOP->channelData[0]);
@@ -164,7 +148,7 @@ NDIOut::execute(TOP_OutputFormatSpecs* output,
 
 		output->newCPUPixelDataLocation = 0;
 
-		if(!_feed) // No feed, no frame
+		if(!_feed)  // No feed, no frame
 			return;
 
 		// Fill
@@ -172,7 +156,7 @@ NDIOut::execute(TOP_OutputFormatSpecs* output,
 		_videoFrame.yres = inputTOP->height;
 		_videoFrame.frame_rate_N = _params.fps;
 		_videoFrame.line_stride_in_bytes = inputTOP->width * 4;
-		_videoFrame.p_data = (uint8_t*)output->cpuPixelData[0];
+		_videoFrame.p_data = reinterpret_cast<std::uint8_t *>(output->cpuPixelData[0]);
 
 #ifdef _WIN32
 		NDIlib_send_send_video_v2(_feed, &_videoFrame);
@@ -180,46 +164,28 @@ NDIOut::execute(TOP_OutputFormatSpecs* output,
 		NDIlib_send_send_video_async_v2(_feed, &_videoFrame);
 #endif
 	}
-
 }
 
-int32_t NDIOut::getNumInfoCHOPChans(void *reserved1)
-{
+int32_t NDIOutTOP::getNumInfoCHOPChans(void *) {
 	// We return the number of channel we want to output to any Info CHOP
 	// connected to the TOP. In this example we are just going to send one channel.
 	return 1;
 }
 
-void NDIOut::getInfoCHOPChan(int32_t index, OP_InfoCHOPChan* chan, void* reserved1)
-{
+void NDIOutTOP::getInfoCHOPChan(int32_t, OP_InfoCHOPChan * chan, void *) {
 	// This function will be called once for each channel we said we'd want to return
 	// In this example it'll only be called once.
 	chan->name->setString("num_connected");
 	chan->value = NDIlib_send_get_no_connections(_feed, 1);
 }
 
-bool	NDIOut::getInfoDATSize(OP_InfoDATSize* infoSize, void* reserved1)
-{
-	infoSize->rows = 0;
-	infoSize->cols = 0;
-	// Setting this to false means we'll be assigning values to the table
-	// one row at a time. True means we'll do it one column at a time.
-	infoSize->byColumn = false;
-	return true;
-}
-
-void NDIOut::getInfoDATEntries(int32_t index,
-								int32_t nEntries,
-								OP_InfoDATEntries* entries,
-								void *reserved1)
-{
-
+bool	NDIOutTOP::getInfoDATSize(OP_InfoDATSize *, void *) {
+	return false;
 }
 
 
 // Override these methods if you want to define specfic parameters
-void NDIOut::setupParameters(OP_ParameterManager* manager, void* reserved1)
-{
+void NDIOutTOP::setupParameters(OP_ParameterManager * manager, void *) {
 	OP_NumericParameter activeToggle;
 	activeToggle.name = "Active";
 	activeToggle.label = "Active";
@@ -253,17 +219,12 @@ void NDIOut::setupParameters(OP_ParameterManager* manager, void* reserved1)
 	manager->appendDAT(metadataDAT);
 }
 
-void NDIOut::pulsePressed(const char* name, void *reserved1)
-{
-
-}
-
-void NDIOut::getErrorString(OP_String *error, void *reserved1) {
+void NDIOutTOP::getErrorString(OP_String * error, void *) {
 	if(_isErrored)
 		error->setString(_errorMessage.c_str());
 }
 
-std::string NDIOut::getGroups(const OP_Inputs* inputs) {
+std::string NDIOutTOP::getGroups(const OP_Inputs * inputs) {
 	const OP_DATInput * groupsDAT = inputs->getParDAT("Groupstable");
 
 	// Check if we really need to updates the groups before doing so
@@ -271,10 +232,8 @@ std::string NDIOut::getGroups(const OP_Inputs* inputs) {
 
 	if(groupsDAT != nullptr &&
 	   groupsDAT->isTable && (
-							  groupsDAT->opPath != _params.groupsDATPath ||
-							  groupsDAT->totalCooks != _params.groupsCookCount
-							  )
-	   ) {
+	   groupsDAT->opPath != _params.groupsDATPath ||
+	   groupsDAT->totalCooks != _params.groupsCookCount)) {
 		_params.groupsDATPath = groupsDAT->opPath;
 		_params.groupsCookCount = groupsDAT->totalCooks;
 
