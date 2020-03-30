@@ -77,7 +77,14 @@ void NDIInTOP::getGeneralInfo(TOP_GeneralInfo * ginfo,
 
 		// Check if specified addition lookup ips changed
 		char additionalIPsPar[256];
+
+#ifdef _WIN32
+		strncpy_s(additionalIPsPar, 256, inputs->getParString("Additionalips"), 256);
+#else
 		strncpy(additionalIPsPar, inputs->getParString("Additionalips"), 256);
+#endif
+
+
 		if (strcmp(_params.additionalIPs, additionalIPsPar) != 0) {
 			// Specified IP changed, close finder
 			if (_finder != nullptr) {
@@ -85,14 +92,18 @@ void NDIInTOP::getGeneralInfo(TOP_GeneralInfo * ginfo,
 				_finder = nullptr;
 			}
 
+#ifdef _WIN32
+			strcpy_s(_params.additionalIPs, 256, additionalIPsPar);
+#else
 			strlcpy(_params.additionalIPs, additionalIPsPar, 256);
+#endif
 		}
 
 		// Do we have a finder ?
 		if (_finder == nullptr) {
 			NDIlib_find_create_t finderParams;
 			finderParams.p_extra_ips = _params.additionalIPs;
-			_finder = NDIlib_find_create2(&finderParams);
+			_finder = NDIlib_find_create_v2(&finderParams);
 		}
 
 		const std::string sourceNamePar = inputs->getParString("Sourcename");
@@ -242,14 +253,14 @@ void NDIInTOP::getInfoCHOPChan(int32_t index, OP_InfoCHOPChan * chan, void *) {
 			break;
 		case 1:  // num_sources
 			chan->name->setString("num_sources");
-			chan->value = _state.sourcesCount;
+			chan->value = static_cast<float>(_state.sourcesCount);
 			break;
 		case 2:  // fps
 			chan->name->setString("received_fps");
 			if(_receiver == nullptr)
 				chan->value = 0;
 			else
-				chan->value = _videoFrame.frame_rate_N / _videoFrame.frame_rate_D;
+				chan->value = static_cast<float>(_videoFrame.frame_rate_N / _videoFrame.frame_rate_D);
 			break;
 	}
 }

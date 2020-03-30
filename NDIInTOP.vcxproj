@@ -11,16 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="NDIIn\FastMemcpy_Avx.h" />
-    <ClInclude Include="NDIIn\NDIIn.h" />
-    <ClInclude Include="third-parties\concurrentqueue.h" />
+    <ClInclude Include="NDIInTOP\NDIInTOP.h" />
     <ClInclude Include="third-parties\CPlusPlus_Common.h" />
     <ClInclude Include="third-parties\GL_Extensions.h" />
     <ClInclude Include="third-parties\TOP_CPlusPlusBase.h" />
+    <ClInclude Include="Utils\fast_memcpy.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="NDIIn\main.cpp" />
-    <ClCompile Include="NDIIn\NDIIn.cpp" />
+    <ClCompile Include="NDIInTOP\main.cpp" />
+    <ClCompile Include="NDIInTOP\NDIInTOP.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2C4AF86A-2FB4-4020-992E-0D0191A668B0}</ProjectGuid>
@@ -59,6 +58,16 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
+    <ClangTidyChecks>+*</ClangTidyChecks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
+    <ClangTidyChecks>+*</ClangTidyChecks>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

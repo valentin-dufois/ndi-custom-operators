@@ -9,7 +9,8 @@
 #include <string>
 #include <vector>
 #include <mutex>
-#include <thread>
+#include <thread> 
+#include <functional>
 
 #include "../third-parties/CHOP_CPlusPlusBase.h"
 #include "../Utils/ringbuffer.hpp"

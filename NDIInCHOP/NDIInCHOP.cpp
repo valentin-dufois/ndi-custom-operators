@@ -107,7 +107,12 @@ void NDIInCHOP::getGeneralInfo(CHOP_GeneralInfo* ginfo,
 			_finder = nullptr;
 		}
 
+
+#ifdef _WIN32
+		strcpy_s(_params.additionalIPs, 256, additionalIPsPar);
+#else
 		strlcpy(_params.additionalIPs, additionalIPsPar, 256);
+#endif
 	}
 
 	// Do we have a finder ?
@@ -309,8 +314,10 @@ void NDIInCHOP::setupParameters(OP_ParameterManager * manager, void *) {
 	bufferSize.defaultValues[0] = .25;
 	bufferSize.minValues[0] = 0;
 	bufferSize.maxValues[0] = 10;
-	bufferSize.clampMins[0] = 0;
-	bufferSize.clampMaxes[0] = 10;
+	bufferSize.clampMins[0] = true;
+	bufferSize.clampMaxes[0] = true;
+	bufferSize.minSliders[0] = 0;
+	bufferSize.maxSliders[0] = 10;
 	manager->appendFloat(bufferSize);
 }
 

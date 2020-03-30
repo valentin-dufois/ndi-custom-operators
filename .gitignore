@@ -16,3 +16,9 @@
 /Release/NDIInTOP.pdb
 /Release/NDIInTOP.ipdb
 /Release/NDIInTOP.iobj
+*.pdb
+*.ipdb
+*.iobj
+/Release/NDIInCHOP.lib
+*.exp
+/x64/Debug/NDIInCHOP.lib

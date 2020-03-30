@@ -31,7 +31,7 @@ NDIOutTOP::NDIOutTOP(const OP_NodeInfo *) {
 	_GPUDownloadOptions.cpuMemPixelType = OP_CPUMemPixelType::BGRA8Fixed;
 
 	_videoFrame.FourCC = NDIlib_FourCC_video_type_e::NDIlib_FourCC_video_type_BGRA;
-	_videoFrame.frame_rate_D = 1.0;
+	_videoFrame.frame_rate_D = 1;
 	_videoFrame.picture_aspect_ratio = 0;
 	_videoFrame.frame_format_type = NDIlib_frame_format_type_progressive;
 	_videoFrame.timecode = 0LL;
@@ -176,7 +176,7 @@ void NDIOutTOP::getInfoCHOPChan(int32_t, OP_InfoCHOPChan * chan, void *) {
 	// This function will be called once for each channel we said we'd want to return
 	// In this example it'll only be called once.
 	chan->name->setString("num_connected");
-	chan->value = NDIlib_send_get_no_connections(_feed, 1);
+	chan->value = static_cast<float>(NDIlib_send_get_no_connections(_feed, 1));
 }
 
 bool	NDIOutTOP::getInfoDATSize(OP_InfoDATSize *, void *) {

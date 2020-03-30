@@ -51,14 +51,14 @@ private:
 	NDIlib_video_frame_v2_t _videoFrame;
 
 	struct {
-		bool active;
+		bool active = true;
 		std::string sourceName = "";
 		NDIlib_recv_bandwidth_e bandwidth;
 		char additionalIPs[256] = {'\0'};
 	} _params;
 
 	struct {
-		uint32_t sourcesCount;
+		uint32_t sourcesCount = 0;
 		std::vector<std::string> sourcesNames;
 		std::vector<std::string> sourcesAdresses;
 
