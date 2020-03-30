@@ -101,9 +101,9 @@
 		396844F4242D3EC6005FE0E7 /* third-parties */ = {
 			isa = PBXGroup;
 			children = (
-				39A903B5242FC9A80088CBE4 /* CHOP_CPlusPlusBase.h */,
 				396844F2242D3E29005FE0E7 /* CPlusPlus_Common.h */,
 				396844F0242D3E29005FE0E7 /* TOP_CPlusPlusBase.h */,
+				39A903B5242FC9A80088CBE4 /* CHOP_CPlusPlusBase.h */,
 			);
 			path = "third-parties";
 			sourceTree = "<group>";

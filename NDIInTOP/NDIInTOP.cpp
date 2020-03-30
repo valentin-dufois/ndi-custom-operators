@@ -101,6 +101,7 @@ void NDIInTOP::getGeneralInfo(TOP_GeneralInfo * ginfo,
 		if (sourceNamePar != _params.sourceName && _receiver != nullptr) {
 			// Requested source has changed, close current connection
 			NDIlib_recv_destroy(_receiver);
+			_receiver = nullptr;
 		}
 
 		_params.sourceName = sourceNamePar;
@@ -123,7 +124,7 @@ void NDIInTOP::getGeneralInfo(TOP_GeneralInfo * ginfo,
 		if (_receiver == nullptr) {
 			// No, check if one source match the requested one
 			for (uint32_t i = 0; i < _state.sourcesCount; ++i) {
-				if (sources[i].p_ndi_name != _params.sourceName)
+				if (std::string(sources[i].p_ndi_name) != _params.sourceName)
 					continue;
 
 				// Connect to the source
